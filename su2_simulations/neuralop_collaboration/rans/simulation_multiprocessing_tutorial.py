@@ -14,7 +14,7 @@ with open('./airfoil_utils/airfoil_names.txt', 'r') as f:
         airfoil_list.append(airfoil_name.strip()[:-4])
 
 # Angles of attack to run for each airfoil
-angle_of_attack_list = [-5, 0, 5, 10, 15]
+angle_of_attack_list = [-5, 0, 5, 10]
 
 
 def gen_airfoil_data(airfoil_name, angle_of_attack):
