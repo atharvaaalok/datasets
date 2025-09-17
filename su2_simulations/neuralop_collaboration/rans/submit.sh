@@ -9,5 +9,5 @@
 #SBATCH --array=0-99
 
 
-apptainer exec container/container.sif \
+apptainer exec containers/Apptainer.sif \
     bash -lc 'uv run simulation_multiprocessing_tutorial.py --airfoil_idx $SLURM_ARRAY_TASK_ID'
