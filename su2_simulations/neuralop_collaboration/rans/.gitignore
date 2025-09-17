@@ -1,6 +1,9 @@
 # Ignore dataset folder
 dataset/
 
+# Ignore Apptainer image files
+*.sif
+
 # Python-generated files
 __pycache__/
 *.py[oc]
