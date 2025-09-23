@@ -1,0 +1,7 @@
+[project]
+name = "euler"
+version = "0.1.0"
+description = "Euler simulations for shape optimization with Neural Operators."
+readme = "README.md"
+requires-python = ">=3.12.0"
+dependencies = []
