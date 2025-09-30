@@ -1,0 +1,55 @@
+# Apptainer definition file that installs SU2 and uv to prepare environment for simulation scripts
+BootStrap: docker
+From: ubuntu:22.04
+
+
+%labels
+    Author "Atharva Aalok <atharvaaalok@gmail.com>"
+    Description "SU2 + uv on Ubuntu 22.04, MPI disabled for SU2 build."
+    Build_date "%DATE%"
+
+
+%post
+    # -e: exit on error, -u: error on unset variables, -x: print commands before running
+    set -eux
+
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update
+    # Install packages to make Gmsh work, not sure if all are needed but this list works
+    apt-get install -y --no-install-recommends \
+        build-essential git pkg-config curl ca-certificates \
+        python3 python3-venv python3-pip \
+        cmake ninja-build meson \
+        gcc g++ gfortran \
+        liblapack-dev libblas-dev \
+        libxcursor1 libxinerama1 libxi6 libxrandr2 libxfixes3 \
+        libxrender1 libsm6 libxext6 libx11-6 libxcb1 libxau6 libxdmcp6 \
+        libglu1-mesa libgl1 libglx-mesa0 libglapi-mesa \
+        libfreetype6 libfontconfig1 libxft2
+    # Reduce image size by removing apt index files
+    rm -rf /var/lib/apt/lists/*
+
+    # Install uv for python package management
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    # Build SU2 from source
+    mkdir /softwares
+    cd /softwares
+    # Shallow clone to speed up builds (full history not needed), >10x lighter
+    git clone --depth 1 https://github.com/su2code/SU2.git
+    cd SU2
+    # Build SU2 inside the cloned repo to avoid root access issues on HPC, also build without MPI to
+    # avoid errors that sometimes arise when built with openmpi
+    ./meson.py setup build --prefix=/softwares/SU2 -Dwith-mpi=disabled
+    ./ninja -C build install
+
+
+%environment
+    # Prepend uv (installed in /root/.local/bin)
+    export PATH="/root/.local/bin:${PATH}"
+
+    # Use meson recommendations for setting path appropriately
+    export PATH="/softwares/SU2/bin:${PATH}"
+    export SU2_RUN="/softwares/SU2/bin"
+    export SU2_HOME="/softwares/SU2"
+    export PYTHONPATH="${PYTHONPATH:-}:${SU2_RUN}"
