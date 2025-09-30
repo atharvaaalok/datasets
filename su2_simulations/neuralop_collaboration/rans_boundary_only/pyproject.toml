@@ -1,0 +1,13 @@
+[project]
+name = "rans_boundary_only"
+version = "0.1.0"
+description = "RANS simulations for shape optimization with Neural Operators."
+readme = "README.md"
+requires-python = ">=3.12.0"
+dependencies = [
+    "gmsh>=4.14.1",
+    "ipykernel>=6.30.1",
+    "matplotlib>=3.10.6",
+    "numpy>=2.3.3",
+    "vtk>=9.5.2",
+]
