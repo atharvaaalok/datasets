@@ -40,3 +40,40 @@ def compute_normals(X):
         N = -N
 
     return N
+
+
+def compute_lift_drag(X, Cp, Cfx = None, Cfy = None):
+    if Cfx is None:
+        Cfx = Cp * 0
+    if Cfy is None:
+        Cfy = Cp * 0
+    
+    # Segment vectors
+    dX = X[1:] - X[:-1]
+    dx = dX[:, 0]
+    dy = dX[:, 1]
+
+    # Segment lengths
+    lengths = np.sqrt(dx**2 + dy**2 + 1e-12)
+
+    # Outward normals: rotate 90 deg clockwise (dy, -dx) / length
+    nx = dy / lengths
+    ny = -dx / lengths
+
+    nx_times_length = dy
+    ny_times_length = -dx
+
+    # Average pressure per segment: shape (N-1,)
+    Cp_avg = 0.5 * (Cp[1:] + Cp[:-1])
+    Cfx_avg = 0.5 * (Cfx[1:] + Cfx[:-1])
+    Cfy_avg = 0.5 * (Cfy[1:] + Cfy[:-1])
+
+    # Pressure force per segment: -CP_avg * normal * length
+    fx = -Cp_avg * nx_times_length + Cfx_avg * lengths
+    fy = -Cp_avg * ny_times_length + Cfy_avg * lengths
+
+    # Total forces
+    CD = fx.sum()
+    CL = fy.sum()
+
+    return CL, CD

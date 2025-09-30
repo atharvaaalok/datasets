@@ -304,7 +304,7 @@ def su2_simulation_func(
     column_headers = ['x', 'y', 'Density', 'Momentum_x', 'Momentum_y', 'Energy', 'Pressure',
                       'Temperature', 'Mach', 'Pressure_Coefficient', 'Velocity_x', 'Velocity_y']
     
-    if type_of_simulation == 'RANS':
+    if type_of_simulation == 'rans':
         RANS_column_extension = ['Nu_Tilde', 'Laminar_Viscosity', 'Skin_Friction_Coefficient_x',
                                  'Skin_Friction_Coefficient_y', 'Heat_Flux', 'Y_Plus',
                                  'Eddy_Viscosity']
@@ -323,7 +323,7 @@ def su2_simulation_func(
     flow_arr['Velocity_x'] = vtk_to_numpy(flow_data.GetArray('Velocity'))[:, 0]
     flow_arr['Velocity_y'] = vtk_to_numpy(flow_data.GetArray('Velocity'))[:, 1]
 
-    if type_of_simulation == 'RANS':
+    if type_of_simulation == 'rans':
         flow_arr['Nu_Tilde'] = vtk_to_numpy(flow_data.GetArray('Nu_Tilde'))
         flow_arr['Laminar_Viscosity'] = vtk_to_numpy(flow_data.GetArray('Laminar_Viscosity'))
         flow_arr['Skin_Friction_Coefficient_x'] = vtk_to_numpy(flow_data.GetArray('Skin_Friction_Coefficient'))[:, 0]
@@ -339,7 +339,6 @@ def su2_simulation_func(
         # Remove the volume data files to save space
         Path(airfoil_simulation_dir / 'restart_flow.dat').unlink()
         Path(airfoil_simulation_dir / 'flow.vtu').unlink()
-        Path(airfoil_simulation_dir / 'flow.npy').unlink()
         Path(f'{airfoil_mesh_filename}.msh').unlink()
         Path(f'{airfoil_mesh_filename}.su2').unlink()
 
