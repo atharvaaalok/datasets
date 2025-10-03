@@ -10,5 +10,5 @@
 
 
 apptainer exec containers/Apptainer.sif \
-    bash -lc 'uv run simulation_multiprocessing_tutorial.py --airfoil_idx $SLURM_ARRAY_TASK_ID' \
-    --mach_num 0.01
+    bash -lc 'uv run simulation_multiprocessing_tutorial.py --airfoil_idx $SLURM_ARRAY_TASK_ID \
+    --mach_num 0.01'
