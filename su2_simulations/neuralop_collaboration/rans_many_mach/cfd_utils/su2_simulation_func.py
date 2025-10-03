@@ -157,7 +157,8 @@ def su2_simulation_func(
 ):
     
     # Create directory for storing airfoil simulation data
-    airfoil_simulation_dir = simulation_data_save_dir / airfoil_name / f'AoA_{str(angle_of_attack_deg)}'
+    airfoil_simulation_dir = (simulation_data_save_dir / airfoil_name /
+                              f'AoA_{str(angle_of_attack_deg)}' / f'Mach_{str(Mach_num)}')
     airfoil_simulation_dir.mkdir(parents = True, exist_ok = False)
 
     # Rotate airfoil clockwise by angle of attack
